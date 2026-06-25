@@ -22,8 +22,9 @@ interface LaunchEvent {
   completed(options?: { allowEvent?: boolean }): void;
 }
 
-const SERVER_WSS   = "wss://localhost:8765"; // WesocketServer direct
-const SEND_TIMEOUT = 4000;                   // safety margin under Outlook's ~5 s limit
+const SERVER_WSS    = "wss://localhost:8765";             // WebSocket path (WebView runtime)
+const SERVER_HTTP   = "http://localhost:8080/ingest";     // fetch path (JS-only runtime)
+const SEND_TIMEOUT  = 4000;                               // safety margin under Outlook's ~5 s limit
 
 // ── UUID ──────────────────────────────────────────────────────────────────────
 
@@ -42,31 +43,40 @@ function getAsync<T>(fn: (cb: (r: Office.AsyncResult<T>) => void) => void): Prom
   });
 }
 
-// ── WebSocket send-and-ack ────────────────────────────────────────────────────
+// ── Transport layer ───────────────────────────────────────────────────────────
+//
+// Outlook LaunchEvent handlers run in one of two JavaScript runtimes:
+//
+//   • WebView runtime  (Outlook on the web, new Mac UI)
+//       → WebSocket IS available → use wss://localhost:8765
+//
+//   • JS-only runtime  (Outlook desktop via <Override type="javascript">)
+//       → WebSocket is NOT available → fall back to fetch http://localhost:8080/ingest
+//
+// We always try WebSocket first; if the global is absent we fall back to fetch.
+// Both paths resolve (never reject) so Outlook is never blocked.
 
-/**
- * Open an ephemeral WebSocket to WesocketServer, send one ingest message,
- * wait for ack, close. Resolves (never rejects) so Outlook is never blocked.
- */
-function sendToServer(action: string, itemKind: string, metadata: object): Promise<void> {
+function buildPayload(action: string, itemKind: string, metadata: object): { payload: string; event: object } {
+  const event = {
+    id:            uuid(),
+    timestamp:     new Date().toISOString(),
+    platform:      "web",
+    appBundleId:   null,
+    correlationId: null,
+    action,
+    itemKind,
+    metadata,
+    widgetPath:     [],
+    screenshotPath: null,
+    clickPoint:     null,
+    excelMetadata:  null,
+  };
+  return { payload: JSON.stringify({ type: "ingest", event }), event };
+}
+
+/** WebSocket path — used when running in a WebView-based runtime. */
+function sendViaWebSocket(payload: string): Promise<void> {
   return new Promise((resolve) => {
-    const event = {
-      id:            uuid(),
-      timestamp:     new Date().toISOString(),
-      platform:      "web",
-      appBundleId:   null,
-      correlationId: null,
-      action,
-      itemKind,
-      metadata,
-      widgetPath:     [],
-      screenshotPath: null,
-      clickPoint:     null,
-      excelMetadata:  null,
-    };
-
-    const payload = JSON.stringify({ type: "ingest", event });
-
     const timer = setTimeout(resolve, SEND_TIMEOUT);
     const done  = () => { clearTimeout(timer); resolve(); };
 
@@ -74,8 +84,7 @@ function sendToServer(action: string, itemKind: string, metadata: object): Promi
     try {
       ws = new WebSocket(SERVER_WSS);
     } catch (_) {
-      done();
-      return;
+      done(); return;
     }
 
     ws.onopen    = () => ws.send(payload);
@@ -85,9 +94,33 @@ function sendToServer(action: string, itemKind: string, metadata: object): Promi
         if (msg.type === "ack") { ws.close(); done(); }
       } catch (_) {}
     };
-    ws.onerror   = () => done();
-    ws.onclose   = () => done();
+    ws.onerror = () => done();
+    ws.onclose = () => done();
   });
+}
+
+/** Fetch path — used when WebSocket is unavailable (JS-only runtime on desktop). */
+async function sendViaFetch(payload: string): Promise<void> {
+  try {
+    await fetch(SERVER_HTTP, {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    payload,
+    });
+  } catch (_) {
+    // Server not running — silently ignore so Outlook is never blocked.
+  }
+}
+
+/** Entry point: auto-selects WebSocket or fetch based on runtime capabilities. */
+function sendToServer(action: string, itemKind: string, metadata: object): Promise<void> {
+  const { payload } = buildPayload(action, itemKind, metadata);
+
+  // typeof check avoids ReferenceError in JS-only runtimes where WebSocket is absent.
+  if (typeof WebSocket !== "undefined") {
+    return sendViaWebSocket(payload);
+  }
+  return sendViaFetch(payload);
 }
 
 // ── Item metadata readers ─────────────────────────────────────────────────────

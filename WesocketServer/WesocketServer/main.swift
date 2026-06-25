@@ -94,69 +94,71 @@ if tlsIdentity != nil {
     print("[Server] TLS disabled → ws://localhost:\(wsPort)  ⚠️  add-in will be blocked by mixed-content")
 }
 
-let wsServer  = WebSocketServer(port: wsPort)
-let httpServer = HTTPServer(port: httpPort)
+let wsServer   = WebSocketServer(port: wsPort)
+let httpServer  = HTTPServer(port: httpPort)
 httpServer.eventStore = store
 
-wsServer.onEvent = { event in
+// Shared handler: store the event and print the capture log line.
+// Used by both the WebSocket ingest path and the HTTP POST /ingest path.
+func handleCapturedEvent(_ event: CaptureEvent) {
     Task {
-        do {
-            try await store.append(event)
-
-            // ── Diagnostic log line ──────────────────────────────────────────
-            let source: String
-            switch event.appBundleId ?? "" {
-            case let b where b.contains("Outlook"): source = "\u{001B}[34m[Outlook]\u{001B}[0m"
-            case let b where b.contains("Excel"):   source = "\u{001B}[32m[Excel]\u{001B}[0m"
-            default:                                 source = "\u{001B}[35m[Add-in]\u{001B}[0m"
-            }
-
-            let detail: String
-            if let subject = event.metadata?.subject, !subject.isEmpty {
-                let toStr = event.metadata?.to.prefix(2).joined(separator: ", ") ?? ""
-                let attStr = event.metadata?.attachments.isEmpty == false
-                    ? " 📎\(event.metadata!.attachments.count)"
-                    : ""
-                detail = "\"\(subject)\"\(toStr.isEmpty ? "" : " → \(toStr)")\(attStr)"
-            } else if let range = event.excelMetadata?.selectedRange {
-                detail = "\(event.excelMetadata?.workbookName ?? "")/\(event.excelMetadata?.sheetName ?? "") \(range)"
-            } else {
-                detail = "(no detail)"
-            }
-
-            let emoji: String
-            switch event.action {
-            case .send:             emoji = "📤"
-            case .reply:            emoji = "↩ "
-            case .replyAll:         emoji = "↩↩"
-            case .forward:          emoji = "↪ "
-            case .save:             emoji = "💾"
-            case .compose:          emoji = "✏️ "
-            case .select:           emoji = "👁 "
-            case .close:            emoji = "🚪"
-            case .recipientsChange: emoji = "👥"
-            case .attachmentChange: emoji = "📎"
-            case .fromChange:       emoji = "🔀"
-            case .timeChange:       emoji = "🕐"
-            case .recurrenceChange: emoji = "🔁"
-            case .locationChange:   emoji = "📍"
-            case .meetingAccept:    emoji = "✅"
-            case .meetingTentative: emoji = "🤔"
-            case .meetingDecline:   emoji = "❌"
-            case .shortcutKey:      emoji = "⌨ "
-            case .selectionChange:  emoji = "🖱 "
-            case .edit:             emoji = "✏️ "
-            case .open:             emoji = "📂"
-            default:                emoji = "• "
-            }
-
-            let ts = String(event.timestamp.prefix(19)).replacingOccurrences(of: "T", with: " ")
-            print("\u{001B}[1m[Capture]\u{001B}[0m \(source) \(emoji) \(event.action.rawValue) [\(event.itemKind.rawValue)]  \(detail)  \u{001B}[2m\(ts)\u{001B}[0m")
-        } catch {
+        do { try await store.append(event) } catch {
             print("[Store] Write error: \(error)")
+            return
         }
+
+        let source: String
+        switch event.appBundleId ?? "" {
+        case let b where b.contains("Outlook"): source = "\u{001B}[34m[Outlook]\u{001B}[0m"
+        case let b where b.contains("Excel"):   source = "\u{001B}[32m[Excel]\u{001B}[0m"
+        default:                                source = "\u{001B}[35m[Add-in]\u{001B}[0m"
+        }
+
+        let detail: String
+        if let subject = event.metadata?.subject, !subject.isEmpty {
+            let toStr  = event.metadata?.to.prefix(2).joined(separator: ", ") ?? ""
+            let attStr = event.metadata?.attachments.isEmpty == false
+                ? " 📎\(event.metadata!.attachments.count)" : ""
+            detail = "\"\(subject)\"\(toStr.isEmpty ? "" : " → \(toStr)")\(attStr)"
+        } else if let range = event.excelMetadata?.selectedRange {
+            detail = "\(event.excelMetadata?.workbookName ?? "")/\(event.excelMetadata?.sheetName ?? "") \(range)"
+        } else {
+            detail = "(no detail)"
+        }
+
+        let emoji: String
+        switch event.action {
+        case .send:             emoji = "📤"
+        case .reply:            emoji = "↩ "
+        case .replyAll:         emoji = "↩↩"
+        case .forward:          emoji = "↪ "
+        case .save:             emoji = "💾"
+        case .compose:          emoji = "✏️ "
+        case .select:           emoji = "👁 "
+        case .close:            emoji = "🚪"
+        case .recipientsChange: emoji = "👥"
+        case .attachmentChange: emoji = "📎"
+        case .fromChange:       emoji = "🔀"
+        case .timeChange:       emoji = "🕐"
+        case .recurrenceChange: emoji = "🔁"
+        case .locationChange:   emoji = "📍"
+        case .meetingAccept:    emoji = "✅"
+        case .meetingTentative: emoji = "🤔"
+        case .meetingDecline:   emoji = "❌"
+        case .shortcutKey:      emoji = "⌨ "
+        case .selectionChange:  emoji = "🖱 "
+        case .edit:             emoji = "✏️ "
+        case .open:             emoji = "📂"
+        default:                emoji = "• "
+        }
+
+        let ts = String(event.timestamp.prefix(19)).replacingOccurrences(of: "T", with: " ")
+        print("\u{001B}[1m[Capture]\u{001B}[0m \(source) \(emoji) \(event.action.rawValue) [\(event.itemKind.rawValue)]  \(detail)  \u{001B}[2m\(ts)\u{001B}[0m")
     }
 }
+
+wsServer.onEvent  = { handleCapturedEvent($0) }
+httpServer.onEvent = { handleCapturedEvent($0) }
 
 do {
     try wsServer.start(identity: tlsIdentity)
