@@ -1,0 +1,57 @@
+<!-- Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT License. -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SkanOulook</title>
+
+    <!-- Office JavaScript API -->
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+
+    <!-- Fluent UI -->
+    <link rel="stylesheet" href="https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/office-ui-fabric-core/11.1.0/css/fabric.min.css"/>
+
+    <!-- Add-in styles -->
+    <link href="taskpane.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body class="ms-font-m ms-Fabric">
+
+    <!-- Shown before sideloading -->
+    <section id="sideload-msg" class="sideload-msg">
+        <h2 class="ms-font-xl">
+            Please <a target="_blank" href="https://learn.microsoft.com/office/dev/add-ins/testing/test-debug-office-add-ins#sideload-an-office-add-in-for-testing">sideload</a> the add-in to see the event log.
+        </h2>
+    </section>
+
+    <!-- Main UI -->
+    <main id="app-body" style="display: none;">
+
+        <!-- ── Status bar ─────────────────────────────────── -->
+        <div class="status-bar">
+            <span id="bridge-status-dot" class="status-dot" style="color:#888;">⬤</span>
+            <span id="bridge-status-text" class="ms-font-s">Connecting to WesocketServer…</span>
+            <button id="clear-log" class="clear-btn ms-font-s">Clear</button>
+        </div>
+
+        <!-- ── Legend ─────────────────────────────────────── -->
+        <div class="legend ms-font-xs">
+            <span class="legend-item"><span class="legend-dot" style="background:#0078d7;"></span>select</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#ff8c00;"></span>compose change</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#107c10;"></span>send / WS ok</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#00b7c3;"></span>ack</span>
+        </div>
+
+        <!-- ── Event log ───────────────────────────────────── -->
+        <div id="event-log" class="event-log">
+            <!-- entries are prepended here by outlook.ts -->
+        </div>
+
+    </main>
+
+</body>
+
+</html>
