@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Not sandboxed: CGEventTap and AXUIElement require direct system access -->
+	<key>com.apple.security.app-sandbox</key>
+	<false/>
+	<!-- Hardened Runtime exception: allow unsigned dylibs (not strictly required but
+	     prevents rejections from tight library validation when loading plugins) -->
+	<key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+	<false/>
+</dict>
+</plist>

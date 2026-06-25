@@ -1,0 +1,422 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AB0010002FE8BD5900D0CFD3 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0002002FE8BD5900D0CFD3 /* AppKit.framework */; };
+		AB0011002FE8BD5900D0CFD3 /* Network.framework in Frameworks (Agent) */ = {isa = PBXBuildFile; fileRef = AB0003002FE8BD5900D0CFD3 /* Network.framework */; };
+		AB0012002FE8BD5900D0CFD3 /* ScreenCaptureKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0004002FE8BD5900D0CFD3 /* ScreenCaptureKit.framework */; };
+		AB0013002FE8BD5900D0CFD3 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB0005002FE8BD5900D0CFD3 /* ApplicationServices.framework */; };
+		AB0014002FE8BD5900D0CFD3 /* Network.framework in Frameworks (Server) */ = {isa = PBXBuildFile; fileRef = AB0003002FE8BD5900D0CFD3 /* Network.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		10C02EF82FE8BD5900D0CFD3 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		10C02EFA2FE8BD5900D0CFD3 /* WesocketServer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = WesocketServer; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB0001002FE8BD5900D0CFD3 /* OutlookCaptureAgent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OutlookCaptureAgent.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB0002002FE8BD5900D0CFD3 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		AB0003002FE8BD5900D0CFD3 /* Network.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Network.framework; path = System/Library/Frameworks/Network.framework; sourceTree = SDKROOT; };
+		AB0004002FE8BD5900D0CFD3 /* ScreenCaptureKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScreenCaptureKit.framework; path = System/Library/Frameworks/ScreenCaptureKit.framework; sourceTree = SDKROOT; };
+		AB0005002FE8BD5900D0CFD3 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		10C02EFC2FE8BD5900D0CFD3 /* WesocketServer */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = WesocketServer;
+			sourceTree = "<group>";
+		};
+		AB0020002FE8BD5900D0CFD3 /* Shared */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		AB0021002FE8BD5900D0CFD3 /* OutlookCaptureAgent */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = OutlookCaptureAgent;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		10C02EF72FE8BD5900D0CFD3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AB0014002FE8BD5900D0CFD3 /* Network.framework in Frameworks (Server) */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AB0031002FE8BD5900D0CFD3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AB0010002FE8BD5900D0CFD3 /* AppKit.framework in Frameworks */,
+				AB0011002FE8BD5900D0CFD3 /* Network.framework in Frameworks (Agent) */,
+				AB0012002FE8BD5900D0CFD3 /* ScreenCaptureKit.framework in Frameworks */,
+				AB0013002FE8BD5900D0CFD3 /* ApplicationServices.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		10C02EF12FE8BD5800D0CFD3 = {
+			isa = PBXGroup;
+			children = (
+				AB0020002FE8BD5900D0CFD3 /* Shared */,
+				10C02EFC2FE8BD5900D0CFD3 /* WesocketServer */,
+				AB0021002FE8BD5900D0CFD3 /* OutlookCaptureAgent */,
+				10C02EFB2FE8BD5900D0CFD3 /* Products */,
+				AB00FE002FE8BD5900D0CFD3 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		10C02EFB2FE8BD5900D0CFD3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				10C02EFA2FE8BD5900D0CFD3 /* WesocketServer */,
+				AB0001002FE8BD5900D0CFD3 /* OutlookCaptureAgent.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AB00FE002FE8BD5900D0CFD3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AB0002002FE8BD5900D0CFD3 /* AppKit.framework */,
+				AB0003002FE8BD5900D0CFD3 /* Network.framework */,
+				AB0004002FE8BD5900D0CFD3 /* ScreenCaptureKit.framework */,
+				AB0005002FE8BD5900D0CFD3 /* ApplicationServices.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		10C02EF92FE8BD5900D0CFD3 /* WesocketServer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 10C02F012FE8BD5900D0CFD3 /* Build configuration list for PBXNativeTarget "WesocketServer" */;
+			buildPhases = (
+				10C02EF62FE8BD5900D0CFD3 /* Sources */,
+				10C02EF72FE8BD5900D0CFD3 /* Frameworks */,
+				10C02EF82FE8BD5900D0CFD3 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				10C02EFC2FE8BD5900D0CFD3 /* WesocketServer */,
+				AB0020002FE8BD5900D0CFD3 /* Shared */,
+			);
+			name = WesocketServer;
+			packageProductDependencies = (
+			);
+			productName = WesocketServer;
+			productReference = 10C02EFA2FE8BD5900D0CFD3 /* WesocketServer */;
+			productType = "com.apple.product-type.tool";
+		};
+		AB0050002FE8BD5900D0CFD3 /* OutlookCaptureAgent */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AB0042002FE8BD5900D0CFD3 /* Build configuration list for PBXNativeTarget "OutlookCaptureAgent" */;
+			buildPhases = (
+				AB0030002FE8BD5900D0CFD3 /* Sources */,
+				AB0031002FE8BD5900D0CFD3 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				AB0021002FE8BD5900D0CFD3 /* OutlookCaptureAgent */,
+				AB0020002FE8BD5900D0CFD3 /* Shared */,
+			);
+			name = OutlookCaptureAgent;
+			packageProductDependencies = (
+			);
+			productName = OutlookCaptureAgent;
+			productReference = AB0001002FE8BD5900D0CFD3 /* OutlookCaptureAgent.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		10C02EF22FE8BD5900D0CFD3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2630;
+				LastUpgradeCheck = 2630;
+				TargetAttributes = {
+					10C02EF92FE8BD5900D0CFD3 = {
+						CreatedOnToolsVersion = 26.3;
+					};
+					AB0050002FE8BD5900D0CFD3 = {
+						CreatedOnToolsVersion = 26.3;
+					};
+				};
+			};
+			buildConfigurationList = 10C02EF52FE8BD5900D0CFD3 /* Build configuration list for PBXProject "WesocketServer" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 10C02EF12FE8BD5800D0CFD3;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 10C02EFB2FE8BD5900D0CFD3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				10C02EF92FE8BD5900D0CFD3 /* WesocketServer */,
+				AB0050002FE8BD5900D0CFD3 /* OutlookCaptureAgent */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		10C02EF62FE8BD5900D0CFD3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AB0030002FE8BD5900D0CFD3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		10C02EFF2FE8BD5900D0CFD3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		10C02F002FE8BD5900D0CFD3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		10C02F022FE8BD5900D0CFD3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		10C02F032FE8BD5900D0CFD3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		AB0040002FE8BD5900D0CFD3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = OutlookCaptureAgent/OutlookCaptureAgent.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = OutlookCaptureAgent/Info.plist;
+				MACOSX_DEPLOYMENT_TARGET = 26.2;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.outlookcapture.agent";
+				PRODUCT_NAME = OutlookCaptureAgent;
+				SDKROOT = macosx;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		AB0041002FE8BD5900D0CFD3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = OutlookCaptureAgent/OutlookCaptureAgent.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = OutlookCaptureAgent/Info.plist;
+				MACOSX_DEPLOYMENT_TARGET = 26.2;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.outlookcapture.agent";
+				PRODUCT_NAME = OutlookCaptureAgent;
+				SDKROOT = macosx;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		10C02EF52FE8BD5900D0CFD3 /* Build configuration list for PBXProject "WesocketServer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				10C02EFF2FE8BD5900D0CFD3 /* Debug */,
+				10C02F002FE8BD5900D0CFD3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		10C02F012FE8BD5900D0CFD3 /* Build configuration list for PBXNativeTarget "WesocketServer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				10C02F022FE8BD5900D0CFD3 /* Debug */,
+				10C02F032FE8BD5900D0CFD3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AB0042002FE8BD5900D0CFD3 /* Build configuration list for PBXNativeTarget "OutlookCaptureAgent" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AB0040002FE8BD5900D0CFD3 /* Debug */,
+				AB0041002FE8BD5900D0CFD3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+	};
+	rootObject = 10C02EF22FE8BD5900D0CFD3 /* Project object */;
+}
