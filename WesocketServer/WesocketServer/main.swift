@@ -1,12 +1,63 @@
 import Foundation
 
-// Suppress Network.framework's low-level socket diagnostics that appear in the
-// console whenever a WebSocket client disconnects (normal, expected behaviour):
-//   nw_read_request_report [C…] Receive failed with error "Socket is not connected"
-// These messages go through the OS unified-log activity system (os_activity).
-// Setting OS_ACTIVITY_MODE=disable mutes them without touching our print() output.
-// Must be called before the Network stack makes its first log call.
+// ── Silence Network.framework noise ──────────────────────────────────────────
+//
+// Apple's Network.framework prints low-level socket diagnostics such as:
+//   nw_read_request_report [C8] Receive failed with error "Socket is not connected"
+// whenever a WebSocket client disconnects — perfectly normal, entirely unactionable.
+//
+// Two channels deliver these messages; we kill both:
+//   1. Unified-log / os_activity  → OS_ACTIVITY_MODE=disable
+//   2. Direct stderr writes       → pipe-based line filter below
+
+// Channel 1 – must be set before the network stack initialises.
 setenv("OS_ACTIVITY_MODE", "disable", 1)
+
+// Channel 2 – intercept stderr, drop lines that match known NW noise patterns,
+// forward everything else to the real stderr (Xcode console or terminal tty).
+func installStderrFilter() {
+    // Patterns that identify Network.framework internals.
+    // None of our own [Server]/[WSServer]/[Capture] messages match these.
+    let dropPatterns: [StaticString] = [
+        "nw_read_request_report",
+        "Socket is not connected",
+        "nw_socket_handle_socket_event",
+        "nw_connection_copy_connected_path",
+        "boringssl_",
+        "TIC Read Status",
+    ]
+
+    let pipe     = Pipe()
+    let realFd   = dup(STDERR_FILENO)              // save original stderr
+    dup2(pipe.fileHandleForWriting.fileDescriptor, STDERR_FILENO)
+    close(pipe.fileHandleForWriting.fileDescriptor) // STDERR_FILENO is now the sole writer
+
+    let realOut  = FileHandle(fileDescriptor: realFd, closeOnDealloc: true)
+
+    Thread.detachNewThread {
+        var buf = Data()
+        while true {
+            let chunk = pipe.fileHandleForReading.availableData
+            guard !chunk.isEmpty else { break }
+            buf.append(chunk)
+
+            // Emit complete lines only — never split a message across chunks.
+            while let nl = buf.firstIndex(of: UInt8(ascii: "\n")) {
+                let line = Data(buf[buf.startIndex ... nl])
+                buf.removeSubrange(buf.startIndex ... nl)
+
+                guard let text = String(data: line, encoding: .utf8) else {
+                    realOut.write(line); continue
+                }
+                let suppress = dropPatterns.contains { text.contains("\($0)") }
+                if !suppress { realOut.write(line) }
+            }
+        }
+        if !buf.isEmpty { realOut.write(buf) }   // flush any trailing partial line
+    }
+}
+
+installStderrFilter()
 
 // MARK: - Configuration from environment / args
 
@@ -31,7 +82,7 @@ let store: EventStore
 do {
     store = try EventStore(dataDir: dataDir)
 } catch {
-    fputs("[Server] Failed to initialise EventStore: \(error)\n", stderr)
+    print("[Server] Failed to initialise EventStore: \(error)")
     exit(1)
 }
 
@@ -111,7 +162,7 @@ do {
     try wsServer.start(identity: tlsIdentity)
     try httpServer.start()
 } catch {
-    fputs("[Server] Failed to start: \(error)\n", stderr)
+    print("[Server] Failed to start: \(error)")
     exit(1)
 }
 
