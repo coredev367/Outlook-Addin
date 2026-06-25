@@ -1,5 +1,13 @@
 import Foundation
 
+// Suppress Network.framework's low-level socket diagnostics that appear in the
+// console whenever a WebSocket client disconnects (normal, expected behaviour):
+//   nw_read_request_report [C…] Receive failed with error "Socket is not connected"
+// These messages go through the OS unified-log activity system (os_activity).
+// Setting OS_ACTIVITY_MODE=disable mutes them without touching our print() output.
+// Must be called before the Network stack makes its first log call.
+setenv("OS_ACTIVITY_MODE", "disable", 1)
+
 // MARK: - Configuration from environment / args
 
 let wsPort  = UInt16(ProcessInfo.processInfo.environment["CAPTURE_WS_PORT"]   ?? "") ?? 8765
