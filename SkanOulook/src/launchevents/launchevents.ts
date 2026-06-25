@@ -187,12 +187,6 @@ async function onAppointmentRecurrenceChanged(ev: LaunchEvent): Promise<void> {
   ev.completed();
 }
 
-async function onEnhancedLocationsChanged(ev: LaunchEvent): Promise<void> {
-  const meta = await readApptMeta(Office.context.mailbox.item);
-  await sendToServer("locationChange", "appointment", meta);
-  ev.completed();
-}
-
 // ── Register all handlers with Office ────────────────────────────────────────
 
 Office.onReady(() => {
@@ -205,5 +199,4 @@ Office.onReady(() => {
   Office.actions.associate("onAppointmentAttendeesChanged", onAppointmentAttendeesChanged);
   Office.actions.associate("onAppointmentTimeChanged",      onAppointmentTimeChanged);
   Office.actions.associate("onAppointmentRecurrenceChanged",onAppointmentRecurrenceChanged);
-  Office.actions.associate("onEnhancedLocationsChanged",    onEnhancedLocationsChanged);
 });

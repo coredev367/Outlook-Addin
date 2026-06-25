@@ -27,8 +27,7 @@ do {
     exit(1)
 }
 
-// Load TLS identity (requires ~/.office-addin-dev-certs/localhost.p12).
-// Generate it once with:  cd SkanOulook && npm run prepare-wss
+// Load TLS identity from ~/.office-addin-dev-certs/ (generated automatically via openssl).
 let tlsIdentity = WebSocketServer.loadIdentity()
 if tlsIdentity != nil {
     print("[Server] TLS enabled  → wss://localhost:\(wsPort)")

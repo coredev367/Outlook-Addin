@@ -128,7 +128,6 @@
                 <LaunchEvent Type="OnAppointmentAttendeesChanged" FunctionName="onAppointmentAttendeesChanged"/>
                 <LaunchEvent Type="OnAppointmentTimeChanged"      FunctionName="onAppointmentTimeChanged"/>
                 <LaunchEvent Type="OnAppointmentRecurrenceChanged" FunctionName="onAppointmentRecurrenceChanged"/>
-                <LaunchEvent Type="OnEnhancedLocationsChanged"    FunctionName="onEnhancedLocationsChanged"/>
                 <LaunchEvent Type="OnMessageSend"     FunctionName="onMessageSend"     SendMode="PromptUser"/>
                 <LaunchEvent Type="OnAppointmentSend" FunctionName="onAppointmentSend" SendMode="PromptUser"/>
               </LaunchEvents>
