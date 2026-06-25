@@ -1,18 +1,19 @@
 /*
  * outlook.ts — Office.js event capture for SkanOulook add-in.
  *
- * Captures Outlook interactions and forwards them to WesocketServer
- * (ws://localhost:8765) using the ingest protocol.
+ * Captures Outlook interactions and forwards them directly to WesocketServer
+ * (wss://localhost:8765) using the ingest protocol.
  *
- * To monitor events in the terminal, run:
- *   node bridge.js
+ * WesocketServer must be running with TLS enabled.
+ * Generate the cert once: cd SkanOulook && npm run prepare-wss
+ * Then rebuild WesocketServer in Xcode and run it.
  */
 
 /* global Office, document, WebSocket, setTimeout */
 
-// ── Inline WebSocket bridge ───────────────────────────────────────────────────
+// ── WebSocket connection to WesocketServer ────────────────────────────────────
 
-const _WS_URL = "wss://localhost:8766"; // bridge.js proxy — wss avoids mixed-content block from https
+const _WS_URL = "wss://localhost:8765"; // WesocketServer direct — wss required (HTTPS add-in context)
 const _RECONNECT_MS = 3000;
 
 let _ws: WebSocket | null = null;

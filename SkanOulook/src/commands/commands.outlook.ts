@@ -3,17 +3,21 @@
  *
  * "Capture Snapshot" button (ExecuteFunction):
  *   - Reads the currently selected item in read mode
- *   - POSTs a capture event to bridge.js as a manual snapshot
+ *   - Sends a capture event directly to WesocketServer via wss://localhost:8765
  *   - Shows a brief notification confirming the capture
  *
- * NOTE: LaunchEvents in launchevents.ts handle the real Outlook actions
- * (compose, send, recipients changed, etc.) automatically.
- * This button is for on-demand / manual capture only.
+ * Uses an ephemeral WebSocket (connect → send → ack → close) with a 4 s
+ * safety timeout, the same pattern used by launchevents.ts.
+ *
+ * NOTE: LaunchEvents in launchevents.ts handle automatic Outlook events
+ * (compose, send, recipients changed, etc.).
+ * This button is for on-demand / manual snapshot capture only.
  */
 
-/* global Office */
+/* global Office, WebSocket */
 
-const CMD_BRIDGE_URL = "https://localhost:8766/event"; // HTTP POST (wss for task pane)
+const CMD_SERVER_WSS  = "wss://localhost:8765";
+const CMD_TIMEOUT_MS  = 4000;
 
 // ── UUID ──────────────────────────────────────────────────────────────────────
 
@@ -24,9 +28,36 @@ function cmdUuid(): string {
   });
 }
 
-// ── Capture current read-mode item via HTTP POST ──────────────────────────────
+// ── Ephemeral WebSocket send ──────────────────────────────────────────────────
 
-function captureSnapshot(): void {
+function sendToServer(payload: object): Promise<void> {
+  return new Promise((resolve) => {
+    const timer = setTimeout(resolve, CMD_TIMEOUT_MS);
+    const done  = () => { clearTimeout(timer); resolve(); };
+
+    let ws: WebSocket;
+    try {
+      ws = new WebSocket(CMD_SERVER_WSS);
+    } catch (_) {
+      done();
+      return;
+    }
+
+    ws.onopen    = () => ws.send(JSON.stringify(payload));
+    ws.onmessage = (ev: MessageEvent) => {
+      try {
+        const msg = JSON.parse(ev.data as string);
+        if (msg.type === "ack") { ws.close(); done(); }
+      } catch (_) {}
+    };
+    ws.onerror   = () => done();
+    ws.onclose   = () => done();
+  });
+}
+
+// ── Capture current read-mode item ───────────────────────────────────────────
+
+async function captureSnapshot(): Promise<void> {
   const item = Office.context.mailbox.item as any;
   if (!item) return;
 
@@ -54,30 +85,24 @@ function captureSnapshot(): void {
     excelMetadata:  null,
   };
 
-  // Fire-and-forget HTTP POST — bridge.js handles it
-  fetch(CMD_BRIDGE_URL, {
-    method:  "POST",
-    headers: { "Content-Type": "application/json" },
-    body:    JSON.stringify({ type: "ingest", event }),
-  }).catch(() => { /* bridge.js not running — silent */ });
+  await sendToServer({ type: "ingest", event });
 }
 
 // ── Ribbon button handler ─────────────────────────────────────────────────────
 
 export function captureSnapshotCommand(event: Office.AddinCommands.Event): void {
-  captureSnapshot();
-
-  Office.context.mailbox.item.notificationMessages.replaceAsync(
-    "SkanOulookSnapshot",
-    {
-      type:       Office.MailboxEnums.ItemNotificationMessageType.InformationalMessage,
-      message:    "SkanOulook: snapshot sent to bridge.",
-      icon:       "Icon.80x80",
-      persistent: false,
-    }
-  );
-
-  event.completed();
+  captureSnapshot().then(() => {
+    Office.context.mailbox.item.notificationMessages.replaceAsync(
+      "SkanOulookSnapshot",
+      {
+        type:       Office.MailboxEnums.ItemNotificationMessageType.InformationalMessage,
+        message:    "SkanOulook: snapshot sent to WesocketServer.",
+        icon:       "Icon.80x80",
+        persistent: false,
+      }
+    );
+    event.completed();
+  });
 }
 
 // ── Register with Office ──────────────────────────────────────────────────────
